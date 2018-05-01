@@ -25,6 +25,17 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+// Handle Express Sessions
+app.use(session({
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true
+}));
+
+// Init Passport
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Express Validator (copy from usage)
 app.use(expressValidator({
   errorFormatter: function(param, msg, value) {
@@ -56,6 +67,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('*', function(req, res, next) {
+  res.locals.user = req.user || null;
+  next();
+})
 
 app.use('/', index);
 app.use('/users', users);
