@@ -1,7 +1,36 @@
 doctype html
 html
   head
-    title= title
+    title= Welcome
+    link(rel='stylesheet', href='/stylesheets/bootstrap.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    block content
+    .navbar.navbar-expand-lg.navbar-dark.bg-dark(role='navigation')
+      .container
+        .navbar-header
+          button.navbar-toggler(type='button', data-toggle='collapse', data-target='.navbar-collapse')
+            span.sr-only Toggle navigation
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+          a.navbar-brand(href='#') LoginSystem
+        .navbar-collapse.collapse
+          ul.nav.navbar-nav.mr-auto
+            li.nav-item(class=(title=='Home' ? 'active' : ''))
+              a(href='/').nav-link Home
+            if !user
+              li.nav-item(class=(title=='Login' ? 'active' : ''))
+                a(href='/users/login').nav-link Login
+              li.nav-item(class=(title=='Register' ? 'active' : ''))
+                a(href='/users/register').nav-link Register
+          ul.nav.navbar-nav.navbar-right
+            if user
+              li.nav-item
+                a(href='/users/logout').nav-link Logout
+
+    .container
+      != messages('message_template', locals)
+      block content
+
+    script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js')
+    script(src='/javascripts/bootstrap.js')
