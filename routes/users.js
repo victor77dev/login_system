@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/register', function(req, res, next) {
-  res.render('register', {title: 'Register'});
+  res.render('register', {title: 'Register', registerPost: null});
 });
 
 router.get('/login', function(req, res, next) {
@@ -97,8 +97,10 @@ router.post('/register', upload.single('profileImage'), function(req, res, next)
   var errors = req.validationErrors();
 
   if (errors) {
+    var registerPost = req.body;
     res.render('register', {
-      errors: errors
+      errors: errors,
+      registerPost: registerPost
     });
   } else {
     var newUser = new User({
