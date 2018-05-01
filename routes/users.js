@@ -54,11 +54,20 @@ passport.use(new LocalStrategy(function(username, password, done) {
 }));
 
 // Adding login using passport auth
-router.post('/login',
-  passport.authenticate('local', {failureRedirect: '/users/login', failureFlash: 'Invalid username or password'}),
-    function(req, res) {
+router.post('/login', function(req, res, next) {
+  passport.authenticate('local', function(err, user, info) {
+    if (err) return next(err);
+    // Failed authentication
+    if (!user) {
+      req.flash('alert alert-danger', 'Invalid username or password')
+      return res.redirect('/users/login')
+    }
+    req.logIn(user, function(err){
+      if (err) return next(err);
       req.flash('alert alert-success', 'You are now login');
-      res.redirect('/');
+      return res.redirect('/');
+    });
+  })(req, res, next);
 });
 
 router.post('/register', upload.single('profileImage'), function(req, res, next) {
