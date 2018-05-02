@@ -89,21 +89,22 @@ router.post('/register', upload.single('profileImage'), function(req, res, next)
   req.checkBody('name', 'Name field is required.').notEmpty();
   req.checkBody('email', 'Email field is required.').notEmpty();
   req.checkBody('email', 'Email is invalid.').isEmail();
+  req.checkBody('email', 'Email is already in use.').custom(value => {
+    return new Promise(function(resolve, reject) {
+      User.getUserByEmail(value, function(err, user) {
+        if (user != null)
+          reject('Email already used');
+        else resolve();
+      });
+    });
+  });
   req.checkBody('username', 'Username field is required.').notEmpty();
   req.checkBody('password', 'Password field is required.').notEmpty();
   req.checkBody('password', 'Password should be at least 6 chars long.').isLength({min: 6});
   req.checkBody('confirmPassword', 'Password does not match.').equals(password);
 
   // Check Errors
-  var errors = req.validationErrors();
-
-  if (errors) {
-    var registerPost = req.body;
-    res.render('register', {
-      errors: errors,
-      registerPost: registerPost
-    });
-  } else {
+  var errors = req.asyncValidationErrors().then(() => {
     var newUser = new User({
       name: name,
       email: email,
@@ -121,7 +122,13 @@ router.post('/register', upload.single('profileImage'), function(req, res, next)
 
     res.location('/');
     res.redirect('/');
-  }
+  }).catch((errors) => {
+    var registerPost = req.body;
+    res.render('register', {
+      errors: errors,
+      registerPost: registerPost
+    });
+  });
 });
 
 router.get('/logout', function(req, res) {
