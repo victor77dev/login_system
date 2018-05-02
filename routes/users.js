@@ -34,24 +34,29 @@ passport.deserializeUser(function(id, done) {
 });
 
 // Configure Strategy for passport
-passport.use(new LocalStrategy(function(username, password, done) {
-  // Check user exists
-  User.getUserByUsername(username, function(err, user) {
-    if (err) return done(err);
-    if (!user) {
-      return done(null, false, {message: 'Unknown User'});
-    }
-    // Validate password
-    User.comparePassword(password, user.password, function(err, isMatch) {
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password'
+  },
+  function(email, password, done) {
+    // Check user exists
+    User.getUserByEmail(email, function(err, user) {
       if (err) return done(err);
-      if (isMatch) {
-        return done(null, user);
-      } else {
-        return done(null, false, {message: 'Invalid Password'});
+      if (!user) {
+        return done(null, false, {message: 'Unknown User'});
       }
+      // Validate password
+      User.comparePassword(password, user.password, function(err, isMatch) {
+        if (err) return done(err);
+        if (isMatch) {
+          return done(null, user);
+        } else {
+          return done(null, false, {message: 'Invalid Password'});
+        }
+      });
     });
-  });
-}));
+  })
+);
 
 // Adding login using passport auth
 router.post('/login', function(req, res, next) {
