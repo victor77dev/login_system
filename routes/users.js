@@ -91,6 +91,7 @@ router.post('/register', upload.single('profileImage'), function(req, res, next)
   req.checkBody('email', 'Email is invalid.').isEmail();
   req.checkBody('username', 'Username field is required.').notEmpty();
   req.checkBody('password', 'Password field is required.').notEmpty();
+  req.checkBody('password', 'Password should be at least 6 chars long.').isLength({min: 6});
   req.checkBody('confirmPassword', 'Password does not match.').equals(password);
 
   // Check Errors
