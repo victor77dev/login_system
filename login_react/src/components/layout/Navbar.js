@@ -1,7 +1,42 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-export default class Navbar extends React.Component {
+import { connect } from 'react-redux';
+
+const mapStateToProps = (state) => {
+  return {
+    login: state.user.login
+  }
+};
+
+function LoginButton(props) {
+  if (!props.login) {
+    return <li className={props.loginActive}>
+      <Link to='/login' className='nav-link'>Login</Link>
+    </li>
+  }
+  return <div></div>;
+}
+
+function RegisterButton(props) {
+  if (!props.login) {
+    return <li className={props.registerActive}>
+      <Link to='/register' className='nav-link'>Register</Link>
+    </li>
+  }
+  return <div></div>;
+}
+
+function LogoutButton(props) {
+  if (props.login) {
+    return <li className='nav-item'>
+      <Link to='/logout' className='nav-link'>Logout</Link>
+    </li>
+  }
+  return <div></div>;
+}
+
+class Navbar extends React.Component {
   render() {
     var { location } = this.props;
 
@@ -27,17 +62,11 @@ export default class Navbar extends React.Component {
               <li className={homeActive}>
                 <Link to='/' className='nav-link'>Home</Link>
               </li>
-              <li className={loginActive}>
-                <Link to='/login' className='nav-link'>Login</Link>
-              </li>
-              <li className={registerActive}>
-                <Link to='/register' className='nav-link'>Register</Link>
-              </li>
+              <LoginButton login={this.props.login} loginActive={loginActive} />
+              <RegisterButton login={this.props.login} registerActive={registerActive} />
             </ul>
             <ul className='nav navbar-nav navbar-right'>
-              <li className='nav-item'>
-                <Link to='/logout' className='nav-link'>Logout</Link>
-              </li>
+              <LogoutButton login={this.props.login} />
             </ul>
           </div>
         </div>
@@ -45,3 +74,5 @@ export default class Navbar extends React.Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(Navbar);

@@ -4,7 +4,23 @@ import registerSubmit from './registerSubmit';
 import registerValidate from './registerValidate';
 import registerEmailValidate from './registerEmailValidate';
 
-import './stylesheet/loader.css';
+import { connect } from  'react-redux';
+
+import { fetchUserData } from '../../actions/userActions';
+
+import './stylesheet/loader.css'
+
+const mapStateToProps = (state) => {
+  return {
+    login: state.user.login,
+    loading: state.user.loading
+  }
+}
+
+const mapDispatchToProps = dispatch => ({
+  fetchUserData: () => dispatch(fetchUserData()),
+});
+
 
 const renderField = ({ input, label, type, meta: { touched, error, asyncValidating } }) => (
   <div className='form-group'>
@@ -16,6 +32,15 @@ const renderField = ({ input, label, type, meta: { touched, error, asyncValidati
 )
 
 class RegisterForm extends React.Component {
+  componentDidMount() {
+    this.props.fetchUserData();
+  }
+
+  componentDidUpdate() {
+    if (!this.props.loading && this.props.login)
+      this.props.history.push('/');
+  }
+
   render() {
     const { error, handleSubmit, submitting } = this.props
     return (
@@ -65,9 +90,11 @@ class RegisterForm extends React.Component {
   }
 }
 
-export default reduxForm({
+const RegisterReduxForm = reduxForm({
   form: 'register', // a unique identifier for this form
   validate: registerValidate,
   asyncValidate: registerEmailValidate,
   asyncBlurFields: ['email']
 })(RegisterForm);
+
+export default connect(mapStateToProps, mapDispatchToProps)(RegisterReduxForm);

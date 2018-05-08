@@ -2,11 +2,21 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import loginSubmit from './loginSubmit';
 
+import { connect } from  'react-redux';
+
+import { fetchUserData } from '../../actions/userActions';
+
 const mapStateToProps = (state) => {
   return {
-    msg: state.register.msg
+    msg: state.register.msg,
+    login: state.user.login,
+    loading: state.user.loading
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  fetchUserData: () => dispatch(fetchUserData()),
+});
 
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
   <div className='form-group'>
@@ -17,6 +27,15 @@ const renderField = ({ input, label, type, meta: { touched, error } }) => (
 )
 
 class LoginForm extends React.Component {
+  componentDidMount() {
+    this.props.fetchUserData();
+  }
+
+  componentDidUpdate() {
+    if (!this.props.loading && this.props.login)
+      this.props.history.push('/');
+  }
+
   render() {
     const { error, handleSubmit, submitting } = this.props
     return (
@@ -53,4 +72,4 @@ const LoginReduxForm = reduxForm({
   form: 'login' // a unique identifier for this form
 })(LoginForm);
 
-export default connect(mapStateToProps)(LoginReduxForm);
+export default connect(mapStateToProps, mapDispatchToProps)(LoginReduxForm);
