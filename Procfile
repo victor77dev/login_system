@@ -1,0 +1,1 @@
+web: cd login_react && npm start
