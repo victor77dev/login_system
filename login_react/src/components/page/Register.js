@@ -1,8 +1,8 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import registerSubmit from './registerSubmit';
-import registerValidate from './registerValidate';
-import registerEmailValidate from './registerEmailValidate';
+import registerSubmit from '../code/registerSubmit';
+import registerValidate from '../code/registerValidate';
+import registerEmailValidate from '../code/registerEmailValidate';
 
 import { connect } from  'react-redux';
 
