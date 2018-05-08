@@ -18,6 +18,7 @@ var db = mongoose.connection;
 
 var index = require('./routes/index');
 var users = require('./routes/users');
+var api = require('./routes/api');
 
 var app = express();
 
@@ -73,8 +74,18 @@ app.get('*', function(req, res, next) {
   next();
 })
 
+// Allow Cross-Origin Resource Sharing (CORS)
+app.use(function(req, res, next) {
+  let clientUrl = "http://localhost:3000";
+  res.header("Access-Control-Allow-Origin", clientUrl);
+  res.header('Access-Control-Allow-Credentials', true);
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+})
+
 app.use('/', index);
 app.use('/users', users);
+app.use('/api', api);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

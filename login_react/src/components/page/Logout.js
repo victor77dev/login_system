@@ -1,0 +1,40 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import axios from 'axios';
+
+import { fetchUserData } from '../../actions/userActions';
+
+var apiUrl = 'http://localhost:4000';
+
+const mapStateToProps = (state) => {
+  return {
+    user: state.user.user,
+    login: state.user.login
+  }
+};
+
+const mapDispatchToProps = dispatch => ({
+  fetchUserData: () => dispatch(fetchUserData()),
+});
+
+function logout() {
+  return axios.get(apiUrl + '/api/logout', {withCredentials: true})
+}
+
+class Logout extends React.Component {
+
+  componentDidMount() {
+    logout(this.props).then(() => {
+      this.props.fetchUserData();
+      this.props.history.push('/login');
+    });
+  }
+
+  render() {
+    return (
+      <div className='container'>Logout!!!</div>
+    );
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Logout);

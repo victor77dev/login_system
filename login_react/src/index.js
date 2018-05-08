@@ -1,16 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from "react-redux"
 
 import Layout from './components/layout/Layout';
 
-import Home from './page/Home';
-import Register from './page/Register';
-import Login from './page/Login';
-import Logout from './page/Logout';
+import Home from './components/page/Home';
+import Register from './components/page/Register';
+import Login from './components/page/Login';
+import Logout from './components/page/Logout';
+
+import store from "./store"
 
 import { BrowserRouter as Router, Route } from 'react-router-dom';
 
-ReactDOM.render(
+ReactDOM.render(<Provider store={store}>
   <Router>
     <div>
       <Route path='/' component={Layout} />
@@ -20,5 +23,5 @@ ReactDOM.render(
       <Route path='/logout' component={Logout} />
     </div>
   </Router>
-  , document.getElementById('root')
+</Provider>, document.getElementById('root')
 );
