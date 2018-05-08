@@ -81,7 +81,7 @@ class RegisterForm extends React.Component {
           />
           <div>
             <button className='btn btn-primary' type="submit" disabled={submitting}>
-              Login
+              Register
             </button>
           </div>
         </form>
