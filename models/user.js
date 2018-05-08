@@ -3,6 +3,9 @@ var bcrypt = require('bcryptjs')
 
 let config = require('../config.json');
 let dbPath = config.db.basePath;
+dbPath = dbPath.replace('dbUser', process.env[config.db.dbUser]);
+dbPath = dbPath.replace('dbPassword', process.env[config.db.dbPassword]);
+console.log(dbPath);
 
 mongoose.connect(dbPath);
 

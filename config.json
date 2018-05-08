@@ -6,7 +6,9 @@
     "basePath": "https://victor77dev-login-system.herokuapp.com"
   },
   "db": {
-    "basePath": "mongodb://localhost/login_system"
+    "basePath": "mongodb://dbUser:dbPassword@ds051635.mlab.com:51635/login_system",
+    "dbUser": "MONGODB_USER",
+    "dbPassword": "MONGODB_PASSWORD"
   },
   "jwt": {
     "jwtSecret": "SecretForToken",
