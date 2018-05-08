@@ -1,9 +1,9 @@
 {
   "server": {
-    "basePath": "http://localhost:4000"
+    "basePath": "https://victor77dev-login-system-sev.herokuapp.com"
   },
   "client": {
-    "basePath": "http://localhost:3000"
+    "basePath": "https://victor77dev-login-system.herokuapp.com"
   },
   "db": {
     "basePath": "mongodb://localhost/login_system"
