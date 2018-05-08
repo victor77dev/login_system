@@ -10,7 +10,7 @@ function loginSubmit(values, dispatch, props) {
   return axios.post(apiUrl + '/api/login', values, {withCredentials: true})
     .then((response) => {
       if (!response.data.login) {
-        throw response.data.error;
+        throw response.data;
       } else {
         props.history.push('/');
       }
@@ -18,7 +18,7 @@ function loginSubmit(values, dispatch, props) {
     .catch((err) => {
       let errorMsg = {};
       if (err.login !== undefined)
-        errorMsg._error = err;
+        errorMsg._error = err.error;
       else
         errorMsg._error = 'Server Error!';
       throw new SubmissionError(errorMsg);
