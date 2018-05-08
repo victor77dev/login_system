@@ -2,6 +2,12 @@ import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import loginSubmit from './loginSubmit';
 
+const mapStateToProps = (state) => {
+  return {
+    msg: state.register.msg
+  }
+}
+
 const renderField = ({ input, label, type, meta: { touched, error } }) => (
   <div className='form-group'>
     <label>{label}</label>
@@ -16,6 +22,7 @@ class LoginForm extends React.Component {
     return (
       <div className='container'>
         <h2 className='page-header'>Login</h2>
+        {this.props.msg && <div className='alert alert-success'>{this.props.msg}</div>}
         <p>Please login</p>
         {error && <div className='alert alert-danger'>{error}</div>}
         <form onSubmit={handleSubmit(loginSubmit)}>
@@ -42,6 +49,8 @@ class LoginForm extends React.Component {
   }
 }
 
-export default reduxForm({
+const LoginReduxForm = reduxForm({
   form: 'login' // a unique identifier for this form
 })(LoginForm);
+
+export default connect(mapStateToProps)(LoginReduxForm);

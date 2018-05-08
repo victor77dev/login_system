@@ -1,6 +1,8 @@
 import { SubmissionError } from 'redux-form';
 import axios from 'axios';
 
+import { registered } from '../../actions/registerActions'
+
 var apiUrl = 'http://localhost:4000';
 
 export default function registerSubmit(values, dispatch, props) {
@@ -9,6 +11,7 @@ export default function registerSubmit(values, dispatch, props) {
       if (!response.data.success)
         throw response.data;
       else {
+        dispatch(registered('You have registered sucessfully'));
         props.history.push('/login');
       }
     })
