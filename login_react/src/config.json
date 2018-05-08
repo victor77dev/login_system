@@ -1,0 +1,11 @@
+{
+  "server": {
+    "basePath": "http://localhost:4000"
+  },
+  "client": {
+    "basePath": "http://localhost:3000"
+  },
+  "db": {
+    "basePath": "mongodb://localhost/login_system"
+  }
+}

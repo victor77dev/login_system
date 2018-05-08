@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-var apiUrl = 'http://localhost:4000';
+let config = require('../config.json')
+var apiUrl = config.server.basePath;
 
 export function logined(user) {
   return {

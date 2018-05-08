@@ -3,7 +3,8 @@ import axios from 'axios';
 
 import { registered } from '../../actions/registerActions'
 
-var apiUrl = 'http://localhost:4000';
+let config = require('../../config.json')
+var apiUrl = config.server.basePath;
 
 function loginSubmit(values, dispatch, props) {
   dispatch(registered(''));

@@ -4,7 +4,8 @@ import axios from 'axios';
 
 import { fetchUserData } from '../../actions/userActions';
 
-var apiUrl = 'http://localhost:4000';
+let config = require('../../config.json')
+var apiUrl = config.server.basePath;
 
 const mapStateToProps = (state) => {
   return {

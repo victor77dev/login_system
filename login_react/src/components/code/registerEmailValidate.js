@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-var apiUrl = 'http://localhost:4000';
+let config = require('../../config.json')
+var apiUrl = config.server.basePath;
 
 const registerEmailValidate = (values, dispatch) => {
   return axios.get(apiUrl + '/api/checkEmail', {params: {email: values.email}}, {withCredentials: true})

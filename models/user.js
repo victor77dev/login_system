@@ -1,7 +1,10 @@
 var mongoose = require('mongoose');
 var bcrypt = require('bcryptjs')
 
-mongoose.connect('mongodb://localhost/login_system');
+let config = require('../config.json');
+let dbPath = config.db.basePath;
+
+mongoose.connect(dbPath);
 
 var db = mongoose.connection;
 
