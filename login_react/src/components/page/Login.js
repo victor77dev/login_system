@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import loginSubmit from './loginSubmit';
+import loginSubmit from '../code/loginSubmit';
 
 import { connect } from  'react-redux';
 
