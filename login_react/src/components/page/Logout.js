@@ -19,7 +19,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 function logout() {
-  return axios.get(apiUrl + '/api/logout', {withCredentials: true})
+  return axios.get(apiUrl + '/api/logout')
 }
 
 class Logout extends React.Component {

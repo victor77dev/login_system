@@ -25,7 +25,7 @@ export function loading() {
 export function fetchUserData() {
   return dispatch => {
     dispatch(loading());
-    axios.get(apiUrl + '/api/user', {withCredentials: true})
+    axios.get(apiUrl + '/api/user')
       .then((response) => {
         if (response.data.login)
           dispatch(logined(response.data.user));

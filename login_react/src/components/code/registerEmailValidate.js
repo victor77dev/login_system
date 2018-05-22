@@ -4,7 +4,7 @@ let config = require('../../config.json')
 var apiUrl = config.server.basePath;
 
 const registerEmailValidate = (values, dispatch) => {
-  return axios.get(apiUrl + '/api/checkEmail', {params: {email: values.email}}, {withCredentials: true})
+  return axios.get(apiUrl + '/api/checkEmail', {params: {email: values.email}})
     .then((response) => {
       if (!response.data.available)
         // Throwing error will be incompatible with ESLint rules

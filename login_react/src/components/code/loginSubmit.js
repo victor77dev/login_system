@@ -8,7 +8,7 @@ var apiUrl = config.server.basePath;
 
 function loginSubmit(values, dispatch, props) {
   dispatch(registered(''));
-  return axios.post(apiUrl + '/api/login', values, {withCredentials: true})
+  return axios.post(apiUrl + '/api/login', values)
     .then((response) => {
       if (!response.data.login) {
         throw response.data;
