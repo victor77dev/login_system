@@ -10,15 +10,9 @@ var LocalStrategy = require('passport-local').Strategy;
 // Using mongoose model
 var User = require('../models/user');
 
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.getUserById(id, function(err, user) {
-    done(err, user);
-  });
-});
+var config = require('../config');
+// Using Jwt for auth
+const jwt = require('jsonwebtoken');
 
 router.get('/checkEmail', function(req, res) {
   User.getUserByEmail(req.query.email, function(err, user) {
@@ -36,24 +30,44 @@ router.get('/user', authenticated, function(req, res, next) {
     username: req.user.username,
     profileImage: req.user.profileImage
   };
+  let responseJson = res.locals.responseJson;
   let userInfo = {login: true};
-  userInfo.user = user;
-  res.send(userInfo);
+  responseJson.login = true;
+  responseJson.user = user;
+  res.send(responseJson);
 });
 
 function authenticated(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  }
-  res.send({login: false});
+  // Check token for authenticated if token exists
+  if (!req.headers.authorization)
+    return res.send({login: false, error: 'No token found'});
+  const token = req.headers.authorization.split(' ')[1];
+  return jwt.verify(token, config.jwt.jwtSecret, (err, decoded) => {
+    if (err) return res.send({login: false, error: 'Token invalid, ' + err});
+
+    const userId = decoded.sub;
+    User.getUserById(userId, function(err, user) {
+      if (err) return res.send({login: false, error: 'User not found'});
+      req.user = user;
+      const payload = {
+        sub: userId
+      };
+      const token = jwt.sign(payload, config.jwt.jwtSecret, { expiresIn: config.jwt.sessionTime });
+      res.locals.responseJson = {};
+      res.locals.responseJson.token = token;
+      return next();
+    });
+  });
 }
 
 // Configure Strategy for passport
 passport.use(new LocalStrategy({
     usernameField: 'email',
-    passwordField: 'password'
+    passwordField: 'password',
+    session: false,
+    passReqToCallback: true
   },
-  function(email, password, done) {
+  function(req, email, password, done) {
     // Check user exists
     User.getUserByEmail(email, function(err, user) {
       if (err) return done(err);
@@ -64,7 +78,11 @@ passport.use(new LocalStrategy({
       User.comparePassword(password, user.password, function(err, isMatch) {
         if (err) return done(err);
         if (isMatch) {
-          return done(null, user);
+          const payload = {
+            sub: user.id
+          };
+          const token = jwt.sign(payload, config.jwt.jwtSecret, { expiresIn: config.jwt.sessionTime });
+          return done(null, token, user);
         } else {
           return done(null, false, {message: 'Invalid Password'});
         }
@@ -75,26 +93,24 @@ passport.use(new LocalStrategy({
 
 // Adding login using passport auth
 router.post('/login', function(req, res, next) {
-  passport.authenticate('local', function(err, user, info) {
+  passport.authenticate('local', function(err, token, user, info) {
     if (err) return next(err);
     // Failed authentication
-    if (!user) {
+    if (!token || !user) {
       console.log('failed to login')
       return res.send({login: false, error: 'Invalid username or password'});
     }
-    req.logIn(user, function(err){
-      if (err) return next(err);
-      console.log('login success')
-      let tempUser = {
-        name: user.name,
-        email: user.email,
-        username: user.username,
-        profileImage: user.profileImage
-      };
-      let userInfo = {login: true};
-      userInfo.user = tempUser;
-      return res.send(userInfo);
-    });
+    console.log('login success')
+    let tempUser = {
+      name: user.name,
+      email: user.email,
+      username: user.username,
+      profileImage: user.profileImage
+    };
+    let userInfo = {login: true};
+    userInfo.user = tempUser;
+    userInfo.token = token;
+    return res.send(userInfo);
   })(req, res, next);
 });
 

@@ -25,10 +25,19 @@ export function loading() {
 export function fetchUserData() {
   return dispatch => {
     dispatch(loading());
-    axios.get(apiUrl + '/api/user')
+    const token = localStorage.getItem('token');
+    let authHeader = {};
+    if (token)
+      authHeader = {
+        'Authorization': 'bearer ' + token,
+      };
+    axios.get(apiUrl + '/api/user', {headers: authHeader})
       .then((response) => {
-        if (response.data.login)
+        if (response.data.login) {
           dispatch(logined(response.data.user));
+          const token = response.data.token;
+          localStorage.setItem('token', token);
+        }
         else
           dispatch(logouted());
       });

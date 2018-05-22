@@ -20,6 +20,10 @@ const mapDispatchToProps = dispatch => ({
 
 function logout() {
   return axios.get(apiUrl + '/api/logout')
+  .then((response) => {
+    // Remove token from localStorage
+    localStorage.removeItem('token');
+  })
 }
 
 class Logout extends React.Component {

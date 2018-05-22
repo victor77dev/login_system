@@ -13,6 +13,8 @@ function loginSubmit(values, dispatch, props) {
       if (!response.data.login) {
         throw response.data;
       } else {
+        const token = response.data.token;
+        localStorage.setItem('token', token);
         props.history.push('/');
       }
     })
