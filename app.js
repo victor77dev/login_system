@@ -19,6 +19,7 @@ var db = mongoose.connection;
 var index = require('./routes/index');
 var users = require('./routes/users');
 var api = require('./routes/api');
+var authMiddleware = require('./routes/auth')
 
 var config = require('./config.json');
 
@@ -86,6 +87,7 @@ app.use(function(req, res, next) {
 
 app.use('/', index);
 app.use('/users', users);
+app.use('/api', authMiddleware);
 app.use('/api', api);
 
 // catch 404 and forward to error handler

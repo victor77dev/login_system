@@ -23,7 +23,7 @@ router.get('/checkEmail', function(req, res) {
   });
 });
 
-router.get('/user', authenticated, function(req, res, next) {
+router.get('/user', function(req, res, next) {
   let user = {
     name: req.user.name,
     email: req.user.email,
@@ -36,29 +36,6 @@ router.get('/user', authenticated, function(req, res, next) {
   responseJson.user = user;
   res.send(responseJson);
 });
-
-function authenticated(req, res, next) {
-  // Check token for authenticated if token exists
-  if (!req.headers.authorization)
-    return res.send({login: false, error: 'No token found'});
-  const token = req.headers.authorization.split(' ')[1];
-  return jwt.verify(token, config.jwt.jwtSecret, (err, decoded) => {
-    if (err) return res.send({login: false, error: 'Token invalid, ' + err});
-
-    const userId = decoded.sub;
-    User.getUserById(userId, function(err, user) {
-      if (err) return res.send({login: false, error: 'User not found'});
-      req.user = user;
-      const payload = {
-        sub: userId
-      };
-      const token = jwt.sign(payload, config.jwt.jwtSecret, { expiresIn: config.jwt.sessionTime });
-      res.locals.responseJson = {};
-      res.locals.responseJson.token = token;
-      return next();
-    });
-  });
-}
 
 // Configure Strategy for passport
 passport.use(new LocalStrategy({
@@ -176,6 +153,7 @@ router.post('/register', function(req, res, next) {
 });
 
 router.get('/logout', function(req, res) {
+  // Note: Token revocation is not implemented. May need to store token in server side for revoking token
   req.logout();
   res.send({login: false});
 });
