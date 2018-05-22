@@ -13,6 +13,8 @@ var User = require('../models/user');
 var config = require('../config');
 // Using Jwt for auth
 const jwt = require('jsonwebtoken');
+const jwtSecret = process.env[config.jwt.jwtSecret];
+const jwtSessionTime = parseInt(process.env[config.jwt.sessionTime]);
 
 router.get('/checkEmail', function(req, res) {
   User.getUserByEmail(req.query.email, function(err, user) {
@@ -58,7 +60,7 @@ passport.use(new LocalStrategy({
           const payload = {
             sub: user.id
           };
-          const token = jwt.sign(payload, config.jwt.jwtSecret, { expiresIn: config.jwt.sessionTime });
+          const token = jwt.sign(payload, jwtSecret, { expiresIn: jwtSessionTime });
           return done(null, token, user);
         } else {
           return done(null, false, {message: 'Invalid Password'});

@@ -11,7 +11,7 @@
     "dbPassword": "MONGODB_PASSWORD"
   },
   "jwt": {
-    "jwtSecret": "SecretForToken",
-    "sessionTime": 60
+    "jwtSecret": "JWT_SECRET",
+    "sessionTime": "JWT_SESSION_TIME"
   }
 }
