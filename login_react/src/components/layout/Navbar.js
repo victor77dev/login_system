@@ -48,7 +48,7 @@ class Navbar extends React.Component {
       <nav className='navbar navbar-expand-lg navbar-dark bg-dark'>
         <div className='container'>
           <div className='navbar-header'>
-            <a className='navbar-brand' href='/'>Login System</a>
+            <Link to='/' className='navbar-brand'>Login System</Link>
             <button type='button' className='navbar-toggler collapsed' data-toggle='collapse' data-target='.navbar-collapse' aria-expanded='false'>
               <span className='sr-only'>Toggle navigation</span>
               <span className='icon-bar'></span>
