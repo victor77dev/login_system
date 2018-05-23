@@ -11,7 +11,7 @@ import Logout from './components/page/Logout';
 
 import store from "./store";
 
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { HashRouter as Router, Route } from 'react-router-dom';
 
 ReactDOM.render(<Provider store={store}>
   <Router>
