@@ -6,6 +6,7 @@ export default function reducer(state= {
       profileImage: ''
     },
     login: false,
+    errorMsg: '',
     loading: true
   }, action) {
 
@@ -22,6 +23,7 @@ export default function reducer(state= {
           profileImage: ''
         },
         login: false,
+        errorMsg: action.payload,
         loading: false
       }
     }

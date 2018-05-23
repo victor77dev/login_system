@@ -9,6 +9,7 @@ import { fetchUserData } from '../../actions/userActions';
 const mapStateToProps = (state) => {
   return {
     msg: state.register.msg,
+    errorMsg: state.user.errorMsg,
     login: state.user.login,
     loading: state.user.loading
   }
@@ -42,6 +43,7 @@ class LoginForm extends React.Component {
       <div className='container'>
         <h2 className='page-header'>Login</h2>
         {this.props.msg && <div className='alert alert-success'>{this.props.msg}</div>}
+        {this.props.errorMsg && <div className='alert alert-danger'>{this.props.errorMsg}</div>}
         <p>Please login</p>
         {error && <div className='alert alert-danger'>{error}</div>}
         <form onSubmit={handleSubmit(loginSubmit)}>

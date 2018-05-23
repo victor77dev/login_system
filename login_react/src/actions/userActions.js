@@ -10,9 +10,10 @@ export function logined(user) {
   }
 }
 
-export function logouted() {
+export function logouted(error='') {
   return {
-    type: 'LOGOUT'
+    type: 'LOGOUT',
+    payload: error
   }
 }
 
@@ -38,8 +39,15 @@ export function fetchUserData() {
           const token = response.data.token;
           localStorage.setItem('token', token);
         }
-        else
-          dispatch(logouted());
+        else {
+          // Token invalid, Remove current token
+          if (response.data.tokenExpired) {
+            let errorMsg = response.data.error;
+            dispatch(logouted(errorMsg));
+          } else
+            dispatch(logouted());
+          localStorage.removeItem('token');
+        }
       });
   }
 }
