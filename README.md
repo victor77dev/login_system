@@ -17,8 +17,12 @@ There are 2 versions of login system in this project, authentication in both of 
 2. **Client + Server (React + Express)**
 
    Express + Passport handle the auth logic and React handles the ui rendering
+
+   Updates: Token approach for login session (using JsonWebToken)
    
-   Demo: https://victor77dev-login-system.herokuapp.com
+   ~~Demo: https://victor77dev-login-system.herokuapp.com~~
+
+   Latest Demo: https://victor77dev.github.io/login_system
 
    ```
    Note: It may take some time for first loading as server is inactive.
@@ -53,7 +57,9 @@ Most of parts in **Server based** version are based on this video
    > for MongoDB
 * Axios
    > for basic server & client interaction (api calls)
-
+* JsonWebToken (JWT)
+   > for token generation and verification of login session (https://github.com/auth0/node-jsonwebtoken)
+   
 Branches
 ========
 ### simple_login
@@ -64,6 +70,8 @@ Branches
    The settings used to config backend project in Heroku (Server based version + api for React version)
 ### heroku_client
    The settings used to config frontend project in Heroku (React project)
+### github_page_setting
+   The settings used to config frontend project deployed in github page (React project)
    
 Tags
 ========
@@ -73,3 +81,5 @@ Tags
    The login system using Express + Passport as backend and React as frontend (with differnet updates & bug fixes)
 ### Client_login_all_in_1_commit
    An old version where all the React commits packed into 1 commit (Difficult to read, suggest to check Client_login_v0.1)
+### Client_login_v0.2
+   The login system using JWT for token approach login session
