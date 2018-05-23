@@ -13,7 +13,16 @@ var authenticated = function(req, res, next) {
     return res.send({login: false, error: 'No token found'});
   const token = req.headers.authorization.split(' ')[1];
   return jwt.verify(token, config.jwt.jwtSecret, (err, decoded) => {
-    if (err) return res.send({login: false, error: 'Token invalid, ' + err});
+    if (err) {
+      if (err.name === 'TokenExpiredError' && err.message === 'jwt expired')
+        return res.send({
+          login: false,
+          tokenExpired: true,
+          error: 'Login seesion timeout. Please login again.(Expiration Time: ' + config.jwt.sessionTime + 's)'
+        });
+      else
+        return res.send({login: false, error: 'Token invalid, ' + err});
+    }
 
     const userId = decoded.sub;
     User.getUserById(userId, function(err, user) {
