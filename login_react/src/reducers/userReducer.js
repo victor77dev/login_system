@@ -32,6 +32,11 @@ export default function reducer(state= {
         loading: true
       }
     }
+    case 'ERROR': {
+      return {...state,
+        errorMsg: action.payload,
+      }
+    }
     default:
       // do nothing
   }

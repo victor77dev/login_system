@@ -23,6 +23,13 @@ export function loading() {
   }
 }
 
+export function getError(error) {
+  return {
+    type: 'ERROR',
+    payload: error
+  }
+}
+
 export function fetchUserData() {
   return dispatch => {
     dispatch(loading());
@@ -48,6 +55,9 @@ export function fetchUserData() {
             dispatch(logouted());
           localStorage.removeItem('token');
         }
+      })
+      .catch((error) => {
+        dispatch(getError(error.toString()));
       });
   }
 }

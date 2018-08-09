@@ -8,7 +8,8 @@ const mapStateToProps = (state) => {
   return {
     user: state.user.user,
     login: state.user.login,
-    loading: state.user.loading
+    loading: state.user.loading,
+    errorMsg: state.user.errorMsg
   }
 };
 
@@ -27,13 +28,29 @@ class Home extends React.Component {
   }
 
   render() {
+    const { user, errorMsg } = this.props;
+    const { name, email, username, profileImage } = user;
+    if (errorMsg !== '' && name === '' && email === '' && username === '' && profileImage === '')
+      return (
+        <div className='container'>
+          <h1>Server is not available!!!</h1>
+          <h1>Please contact the administrator!</h1>
+        </div>
+      );
+    if (name === '' && email === '' && username === '' && profileImage === '')
+      return (
+        <div className='container'>
+          <h1>Server is inactive!!!</h1>
+          <h1>Please wait for ~30s!</h1>
+        </div>
+      );
     return (
       <div className='container'>
-        Welcome {this.props.user.name}!!!
+        Welcome {name}!!!
         <ul>
-          <li>email: {this.props.user.email}</li>
-          <li>username: {this.props.user.username}</li>
-          <li>profileImage: {this.props.user.profileImage}</li>
+          <li>email: {email}</li>
+          <li>username: {username}</li>
+          <li>profileImage: {profileImage}</li>
         </ul>
       </div>
     );
